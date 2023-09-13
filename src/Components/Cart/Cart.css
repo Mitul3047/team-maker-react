@@ -1,0 +1,9 @@
+.cart-container{
+    background-color: rgba(100, 36, 36, 0.534);
+    text-align: left;
+    padding: 15px;
+}
+
+.cart-container li{
+    list-style: none;
+}
