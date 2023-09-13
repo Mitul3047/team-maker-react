@@ -7,7 +7,9 @@ import Cart from '../Cart/Cart';
 const Home = () => {
 
     const [allActors, setAllActors] = useState([]);
-
+    const [selectedActorAdded, setSelectedActorAdded] = useState([]);
+    const [remaining, setRemaining] = useState(0)
+    const [totalCost, setTotalCost] = useState(0)
 
     useEffect(() => {
         fetch('./data.json')
@@ -15,17 +17,38 @@ const Home = () => {
             .then(data => setAllActors(data))
     }, [])
 
-    const [selectedActorAdded, setSelectedActorAdded] = useState([]);
+
 
     const handleSelect = (actor) => {
         const isExist = selectedActorAdded.find(item => item.id == actor.id);
-        if(isExist){
+        if (isExist) {
             return alert("already Booked")
         }
-        const newActorAdded = [...selectedActorAdded, actor]
-        setSelectedActorAdded(newActorAdded);
+        else {
+            let count = actor.salary
+
+            selectedActorAdded.forEach(item => {
+                count += item.salary
+                // if (count > 20000) {
+                //    return alert('You have crosed your limt')
+                // } else{
+                //     const amountRemain = 20000 - count
+
+                // }
+            })
+            const totalRemaining = 20000 - count
+            
+            if (count > 20000) {
+               return alert('Have Reached Your Limit')
+            }
+            setTotalCost(count);
+            setRemaining(totalRemaining);
+            // console.log(totalRemaining)
+            const newActorAdded = [...selectedActorAdded, actor];
+            setSelectedActorAdded(newActorAdded);
+        }
     }
-    console.log(selectedActorAdded)
+    // console.log(selectedActorAdded)
 
 
     // console.log(allActors)
@@ -35,7 +58,7 @@ const Home = () => {
             <div className="home-container">
                 <div className="card-container">
                     {
-                        allActors.map(actor => 
+                        allActors.map(actor =>
                         (<div key={actor.id} className="card">
                             <div className="card-img">
                                 <img className='photo' src={actor.image} alt="" />
@@ -51,7 +74,10 @@ const Home = () => {
                     }
                 </div>
                 <div className="cart-container">
-                    <Cart selectedActorAdded={selectedActorAdded}></Cart>
+                    <Cart selectedActorAdded={selectedActorAdded}
+                        remaining={remaining}
+                        totalCost={totalCost}
+                    ></Cart>
                 </div>
             </div>
 
